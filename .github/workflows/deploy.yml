@@ -3,7 +3,7 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main
+      - Build_Fixes
 
 permissions:
   contents: read
@@ -30,24 +30,23 @@ jobs:
       - name: Build the project
         run: |
           cd urdf_creator
-          # Set CI to false to avoid treating warnings as errors
           CI=false npm run build
-      
+
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: urdf_creator/dist
 
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
